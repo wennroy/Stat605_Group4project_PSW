@@ -1,0 +1,128 @@
+---
+title: "First_Draft"
+author: "Zhengyuan Wen, Ming Pei, Haoyue Shi"
+date: "2021/12/2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=FALSE}
+library(tuneR)
+library(seewave)
+library(nnet)
+```
+
+# Abstract
+
+We developed a method to classify different bird songs based on 12GB datasets of 13 bird species. We used CHTC to preprocess the audios parallel since the preprocessing is the most time consuming in our project. At the end, we obtained a model with an accuracy 49.14% on test datasets, which is larger than a random guess (7.7%) among 13 bird species.
+
+# Details
+
+## Selection and rename on Data
+
+To obtain a better classification result, we dropped the birdsongs for those numbers are below 200. And it gave us only 13 bird species. And we renamed their filenames with their abbreviations of bird species. eg: XC122037.wav ->amerob1220397.wav.
+
+## Preprocessing Process
+
+To preprocess an audio for computer to understand, the followings are the methods we took in our project. Here is the Rcode to achieve it.
+
+```{r, warning=FALSE}
+setwd("~/stat605/group4/tmp/birdsongWav/Sample_wav")
+file_name = "1"
+all_files <- dir(paste0(file_name,"/"))
+wl <- 64
+
+sample_audio = readWave(paste0(file_name,'/',all_files[1]))
+spectro(sample_audio)
+sample_audio_fir = fir(sample_audio, from=1500, to = NULL, output = "Wave")
+spectro(sample_audio_fir)
+
+mspectra <- meanspec(sample_audio_fir, wl=wl, plot=FALSE)[,2]
+```
+
+The Preprocessing consists of two parts.
+
+1\. FIR: Finite Impulse Response filter. Filters out a selected frequency section of a time wave. We manually set a frequency baseline 1500Hz by listening to different birdsongs of 13 bird species. And remove the amplitudes whose frequency are smaller than 1500Hz.
+
+2\. Mean frequency spectrum. Extract the mean relative amplitude of the frequency distribution using STFT(Short-time Fourier Transformation).
+
+```{r}
+length(mspectra)
+```
+
+At the end, we got 32 features extracted from an audio. Noticed that the number of features we obtained were relatively lower than usual audio preprocessing, that is because the model can not be run in parallel, we were concerned about spending too much time on training the model.
+
+## Deployment on CHTC
+
+```{r,warning = FALSE}
+setwd("~/stat605/group4")
+path = "tmp/birdsongWav/New_wav"
+
+all_dirs = list.dirs(path)
+all_files = list.files(path)
+# print(all_files)
+count = numeric(length(all_files))
+i = 1
+for (file_dir in all_dirs[2:length(all_dirs)]){
+  count[i] = length(list.files(file_dir))
+  i = i + 1
+}
+names(count) <- all_files
+print(count)
+```
+
+The total number of samples is 6727. We used `sample()` function in `R` to obtain 30 groups of samples and deployed on 30 CHTC machines.
+
+```{r,warning = FALSE}
+path = "~/stat605/group4/tmp/birdsongWav/Sample_wav"
+distributed_files = list.dirs(path)
+count = numeric(0)
+i = 0
+for (d_file in distributed_files[2:length(distributed_files)]) {
+  i = i + 1
+  files <- list.files(d_file)
+  count[i] = length(files)
+}
+print(count)
+```
+
+Each files contains roughly 225 files and each of their sizes is about 350MB. Since FIR requires large amount of memories, each procedure we requested 1CPU (Used 1), 2GB of Disk Space (Used roughly 1.3GB) and 8GB of memories (Used roughly 6GB). A single job can be completed in 14 minutes. The total 30 parallel jobs were completed in 1 hour, saving us a lot of time.
+
+## Model introduction
+
+For training part, we used Single Hidden-Layer Neural Network with skip layer connection for prediction. We tried several parameter options for size of the hidden layer, and ended up choosing 8 knots in hidden layer as our final choice. Larger ones (16 and 12) showed worse results than the 8 because of overfitting problem. The total parameters (weights) we need to estimate are 797 ($32\times 8 +8\times 13+32\times 13 + 13 + 8 = 797$).
+
+## Results
+
+The training data we used are group 4 to 30, total 6027 samples. Rest of them are test data with 700 samples. Training process took about 3 minutes for total 2235 iterations, reaching at 8487.7180 loss value. The test accuracy is 49.14% similar to training accuracy (51.40%). We say there is no obvious overfitting problem. As for multiple class prediction task, we often use Cohen's Kappa Coefficients to measure good or bad of a model. $$\kappa = \frac{p_0-p_e}{1-p_e} = 0.4225$$ where $p_o$ is the relative observed agreement among raters, and $p_e$ is the hypothetical probability of chance agreement. In this case, $p_e = sum(\text{Number of prediction on i}^{th} \text{ bird}\times \text{Number of }i^{th} \text{ bird})/\text{Sample_size}^2$. $\kappa = 0.4225$ represents a moderate agreement for categorical data.
+
+## Examples
+
+```{r, warning = FALSE}
+load("model.RData")
+setwd("~/stat605/group4/tmp/birdsongWav/results")
+test_mspectra = read.table("spec/mspectra1")
+test_label_name = read.table("label/label_file1")
+for (i in c(2:3)) {
+  file = paste0("spec/mspectra",i)
+  test_mspectra = rbind(test_mspectra, read.table(file))
+  test_label_name = rbind(test_label_name, read.table(paste0("label/label_file",i)))
+}
+
+(predict(fit_nnet2, newdata = test_mspectra[c(150,300,450),], type = "raw"))
+test_label_name[c(150,300,450),]
+
+```
+
+Here are some examples. Softmax has been applied on the outputs directly.
+
+# Future prospects and drawbacks
+
+1.  Hard to distinguish the bird songs whose frequency is lower than 1500 Hz. Although we didn't have those birds after selections.
+
+2.  The accuracy of model can be improved by using Convolutional Neural Network and MFCC.
+
+3.  We didn't deal with the data imbalance issue. (The larges number of samples of certain bird species is 1206 and the samllest is 223)
