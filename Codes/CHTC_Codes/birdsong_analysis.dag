@@ -1,7 +1,0 @@
-job 1 preprocessing.sub
-job 2 training.sub
-
-script pre 1 pre.sh
-script post 1 mv_data.sh
-
-parent 1 child 2
