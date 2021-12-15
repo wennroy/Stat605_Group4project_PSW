@@ -1,0 +1,48 @@
+000 (228433.002.000) 2021-12-02 11:00:10 Job submitted from host: <128.104.100.148:9618?addrs=128.104.100.148-9618+[2607-f388-107c-501-216-3eff-feb2-bc11]-9618&alias=learn.chtc.wisc.edu&noUDP&sock=schedd_1130_aa1b>
+...
+040 (228433.002.000) 2021-12-02 11:01:09 Entered queue to transfer input files
+	Transferring to host: <128.105.245.158:9618?addrs=128.105.245.158-9618&alias=e2358.chtc.wisc.edu&noUDP&sock=slot1_16_27608_155c_19343>
+...
+040 (228433.002.000) 2021-12-02 11:01:28 Started transferring input files
+	Seconds spent in queue: 19
+...
+040 (228433.002.000) 2021-12-02 11:01:42 Finished transferring input files
+...
+001 (228433.002.000) 2021-12-02 11:01:43 Job executing on host: <128.105.245.158:9618?addrs=128.105.245.158-9618&alias=e2358.chtc.wisc.edu&noUDP&sock=startd_2758_564a>
+...
+006 (228433.002.000) 2021-12-02 11:01:52 Image size of job updated: 528
+	1  -  MemoryUsage of job (MB)
+	180  -  ResidentSetSize of job (KB)
+...
+006 (228433.002.000) 2021-12-02 11:05:18 Image size of job updated: 1689304
+	1  -  MemoryUsage of job (MB)
+	180  -  ResidentSetSize of job (KB)
+...
+040 (228433.002.000) 2021-12-02 11:05:20 Started transferring output files
+	Seconds spent in queue: 251
+...
+040 (228433.002.000) 2021-12-02 11:05:20 Finished transferring output files
+...
+005 (228433.002.000) 2021-12-02 11:05:20 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:03:15, Sys 0 00:00:03  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:03:15, Sys 0 00:00:03  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	139095  -  Run Bytes Sent By Job
+	383684896  -  Run Bytes Received By Job
+	139095  -  Total Bytes Sent By Job
+	383684896  -  Total Bytes Received By Job
+	Partitionable Resources :     Usage  Request Allocated 
+	   Cpus                 :      1.00        1         1 
+	   Disk (KB)            : 888411     2097152   2344027 
+	   IoHeavy              :                            0 
+	   Memory (MB)          :      1        6144      6144 
+
+	Job terminated of its own accord at 2021-12-02T17:05:18Z with exit-code 0.
+...
+000 (228442.002.000) 2021-12-02 11:24:41 Job submitted from host: <128.104.100.148:9618?addrs=128.104.100.148-9618+[2607-f388-107c-501-216-3eff-feb2-bc11]-9618&alias=learn.chtc.wisc.edu&noUDP&sock=schedd_1130_aa1b>
+...
+009 (228442.002.000) 2021-12-02 11:24:48 Job was aborted.
+	via condor_rm (by user zwen42)
+...

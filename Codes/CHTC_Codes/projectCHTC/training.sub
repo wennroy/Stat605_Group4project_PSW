@@ -1,0 +1,18 @@
+# Run a single job to processes the first .tgz file
+
+universe = vanilla
+log = log/training.log
+error = err/training.err
+output = output/training.out
+
+executable = ./training.sh
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = spec.tar, label.tar,  training.sh, http://proxy.chtc.wisc.edu/SQUID/chtc/R363.tar.gz, packages.tar.gz, training.R
+
+request_cpus = 1
+request_memory = 8G
+request_disk = 1G
+
+queue

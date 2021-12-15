@@ -1,0 +1,82 @@
+000 (228433.006.000) 2021-12-02 11:00:10 Job submitted from host: <128.104.100.148:9618?addrs=128.104.100.148-9618+[2607-f388-107c-501-216-3eff-feb2-bc11]-9618&alias=learn.chtc.wisc.edu&noUDP&sock=schedd_1130_aa1b>
+...
+040 (228433.006.000) 2021-12-02 11:02:23 Started transferring input files
+	Transferring to host: <128.105.245.158:9618?addrs=128.105.245.158-9618&alias=e2358.chtc.wisc.edu&noUDP&sock=slot1_19_27608_155c_19344>
+...
+040 (228433.006.000) 2021-12-02 11:02:41 Finished transferring input files
+...
+001 (228433.006.000) 2021-12-02 11:02:42 Job executing on host: <128.105.245.158:9618?addrs=128.105.245.158-9618&alias=e2358.chtc.wisc.edu&noUDP&sock=startd_2758_564a>
+...
+006 (228433.006.000) 2021-12-02 11:02:51 Image size of job updated: 468
+	1  -  MemoryUsage of job (MB)
+	468  -  ResidentSetSize of job (KB)
+...
+006 (228433.006.000) 2021-12-02 11:06:20 Image size of job updated: 6271752
+	6125  -  MemoryUsage of job (MB)
+	6271752  -  ResidentSetSize of job (KB)
+...
+007 (228433.006.000) 2021-12-02 11:06:20 Shadow exception!
+	Error from slot1_19@e2358.chtc.wisc.edu: Job has gone over memory limit of 5529 megabytes. Peak usage: 6125 megabytes.
+	0  -  Run Bytes Sent By Job
+	545323264  -  Run Bytes Received By Job
+...
+012 (228433.006.000) 2021-12-02 11:06:20 Job was held.
+	Error from slot1_19@e2358.chtc.wisc.edu: Job has gone over memory limit of 5529 megabytes. Peak usage: 6125 megabytes.
+	Code 34 Subcode 0
+...
+000 (228442.006.000) 2021-12-02 11:24:41 Job submitted from host: <128.104.100.148:9618?addrs=128.104.100.148-9618+[2607-f388-107c-501-216-3eff-feb2-bc11]-9618&alias=learn.chtc.wisc.edu&noUDP&sock=schedd_1130_aa1b>
+...
+009 (228433.006.000) 2021-12-02 11:24:48 Job was aborted.
+	via condor_rm (by user zwen42)
+...
+009 (228442.006.000) 2021-12-02 11:24:49 Job was aborted.
+	via condor_rm (by user zwen42)
+...
+000 (228444.000.000) 2021-12-02 11:26:24 Job submitted from host: <128.104.100.148:9618?addrs=128.104.100.148-9618+[2607-f388-107c-501-216-3eff-feb2-bc11]-9618&alias=learn.chtc.wisc.edu&noUDP&sock=schedd_1130_aa1b>
+...
+009 (228444.000.000) 2021-12-02 11:26:37 Job was aborted.
+	via condor_rm (by user zwen42)
+...
+000 (228445.000.000) 2021-12-02 11:27:17 Job submitted from host: <128.104.100.148:9618?addrs=128.104.100.148-9618+[2607-f388-107c-501-216-3eff-feb2-bc11]-9618&alias=learn.chtc.wisc.edu&noUDP&sock=schedd_1130_aa1b>
+...
+040 (228445.000.000) 2021-12-02 11:28:46 Entered queue to transfer input files
+	Transferring to host: <128.105.245.245:9618?addrs=128.105.245.245-9618&alias=e445.chtc.wisc.edu&noUDP&sock=slot1_1_33296_cb43_19169>
+...
+040 (228445.000.000) 2021-12-02 11:28:51 Started transferring input files
+	Seconds spent in queue: 5
+...
+040 (228445.000.000) 2021-12-02 11:29:12 Finished transferring input files
+...
+001 (228445.000.000) 2021-12-02 11:29:13 Job executing on host: <128.105.245.245:9618?addrs=128.105.245.245-9618&alias=e445.chtc.wisc.edu&noUDP&sock=startd_2440_372c>
+...
+006 (228445.000.000) 2021-12-02 11:29:21 Image size of job updated: 628
+	1  -  MemoryUsage of job (MB)
+	416  -  ResidentSetSize of job (KB)
+...
+006 (228445.000.000) 2021-12-02 11:34:21 Image size of job updated: 4900740
+	2508  -  MemoryUsage of job (MB)
+	2567876  -  ResidentSetSize of job (KB)
+...
+040 (228445.000.000) 2021-12-02 11:38:26 Started transferring output files
+	Seconds spent in queue: 580
+...
+040 (228445.000.000) 2021-12-02 11:38:26 Finished transferring output files
+...
+005 (228445.000.000) 2021-12-02 11:38:26 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:08:28, Sys 0 00:00:29  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:08:28, Sys 0 00:00:29  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	139231  -  Run Bytes Sent By Job
+	545323264  -  Run Bytes Received By Job
+	139231  -  Total Bytes Sent By Job
+	545323264  -  Total Bytes Received By Job
+	Partitionable Resources :      Usage  Request Allocated 
+	   Cpus                 :       0.99        1         1 
+	   Disk (KB)            : 1204097     2097152   2368361 
+	   IoHeavy              :                             0 
+	   Memory (MB)          :    2508        8192      8192 
+
+	Job terminated of its own accord at 2021-12-02T17:38:24Z with exit-code 0.
+...

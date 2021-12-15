@@ -1,0 +1,43 @@
+000 (228433.023.000) 2021-12-02 11:00:10 Job submitted from host: <128.104.100.148:9618?addrs=128.104.100.148-9618+[2607-f388-107c-501-216-3eff-feb2-bc11]-9618&alias=learn.chtc.wisc.edu&noUDP&sock=schedd_1130_aa1b>
+...
+040 (228433.023.000) 2021-12-02 11:10:36 Entered queue to transfer input files
+	Transferring to host: <128.105.245.85:9618?addrs=128.105.245.85-9618&alias=e285.chtc.wisc.edu&noUDP&sock=slot1_38_15045_503d_18281>
+...
+040 (228433.023.000) 2021-12-02 11:10:40 Started transferring input files
+	Seconds spent in queue: 4
+...
+040 (228433.023.000) 2021-12-02 11:10:56 Finished transferring input files
+...
+001 (228433.023.000) 2021-12-02 11:10:57 Job executing on host: <128.105.245.85:9618?addrs=128.105.245.85-9618&alias=e285.chtc.wisc.edu&noUDP&sock=startd_2787_3a89>
+...
+006 (228433.023.000) 2021-12-02 11:11:07 Image size of job updated: 56472
+	54  -  MemoryUsage of job (MB)
+	54568  -  ResidentSetSize of job (KB)
+...
+006 (228433.023.000) 2021-12-02 11:16:07 Image size of job updated: 2022516
+	1513  -  MemoryUsage of job (MB)
+	1548544  -  ResidentSetSize of job (KB)
+...
+040 (228433.023.000) 2021-12-02 11:18:45 Started transferring output files
+	Seconds spent in queue: 489
+...
+040 (228433.023.000) 2021-12-02 11:18:45 Finished transferring output files
+...
+005 (228433.023.000) 2021-12-02 11:18:45 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:07:08, Sys 0 00:00:23  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:07:08, Sys 0 00:00:23  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	138712  -  Run Bytes Sent By Job
+	513149216  -  Run Bytes Received By Job
+	138712  -  Total Bytes Sent By Job
+	513149216  -  Total Bytes Received By Job
+	Partitionable Resources :      Usage  Request Allocated 
+	   Cpus                 :       0.96        1         1 
+	   Disk (KB)            : 1141261     2097152   2347893 
+	   IoHeavy              :                             0 
+	   Memory (MB)          :    1513        6144      6144 
+
+	Job terminated of its own accord at 2021-12-02T17:18:44Z with exit-code 0.
+...
