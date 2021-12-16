@@ -13,7 +13,7 @@ which is larger than a random guess (7.7%) or guessing on the most frequent bird
 
 ## Files In Repository
 
-The <code>Codes</code> folder contains all codes we used in the project
+The <code>Codes</code> folder contains two parts, local codes and CHTC codes
 
 The <code>Figures</code> folder contains two figures, which show the structure of our neural network model
 
