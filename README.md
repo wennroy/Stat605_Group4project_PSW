@@ -15,6 +15,8 @@ which is larger than a random guess (7.7%) or guessing on the most frequent bird
 
 The <code>Codes</code> folder contains two parts, local codes and CHTC codes
 
+The <code>Drafts</code> folder contains our drafts for final report
+
 The <code>Figures</code> folder contains two figures, which show the structure of our neural network model
 
 The <code>Preprocessing_Result</code> folder contains the clean data, which would be used for model training and tesing
