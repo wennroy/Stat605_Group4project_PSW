@@ -1,4 +1,6 @@
-# Stat605_Group4project_PSW
+# STAT628 Module3 Group6
+## Introduction
+
 
 ## Project Introduction 
 The goal of this project is to develop a method to classify different bird songs based on 12GB datasets of 13 bird species. 
@@ -27,8 +29,6 @@ The <code>Reports</code> folder contains our final report
 
 ## Team Members
 Zhengyuan Wen, Pei Ming, Haoyue Shi
-
-
 
 
 
