@@ -1,0 +1,147 @@
+---
+title: "Bird Song Analysis"
+author: "Zhengyuan Wen, Ming Pei, Haoyue Shi"
+date: "2021/12/14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/stat605/group4/tmp/birdsongWav/results")
+```
+
+```{r, warning=FALSE, echo = FALSE}
+library(tuneR)
+library(seewave)
+library(nnet)
+```
+
+**Github Link: **[https://github.com/wennroy/Stat605_Group4project_PSW](https://github.com/wennroy/Stat605_Group4project_PSW)
+
+# Introduction
+
+Our dataset contains birdsong audios from different bird species. We aim to develop a method to classify different bird songs based on 12GB datasets of 13 bird species. We preprocessed the audios in a parallel manner on CHTC since it is the most time-consuming process in our project. Then, we used Single Hidden-Layer Neural Network with skip layer connection to classify the birds species. At the end, we obtained a model with an accuracy 49.14% on test datasets, which is larger than a random guess (7.7\%) or guessing on the most frequent bird species (17.92\%) among 13 bird species. 
+
+# Data and Its Cleaning
+
+The birdsong data we analyzed can be downloaded from Kaggle. It contains 153 subdirectories and each of them contains several .wav files recoding the birdsong of the same kind of birds. The whole datasets is 26 GB. 
+
+We dropped the bird species whose number of birdsong files contained in our dataset is below 200, because categories with small number of files would cause a dataset imbalance issue. We only chose 13 bird species, which are as follows. (Number below the bird species is the total number of files for each category.)
+
+```{r,warning = FALSE, echo = FALSE}
+setwd("~/stat605/group4")
+path = "tmp/birdsongWav/New_wav"
+
+all_dirs = list.dirs(path)
+all_files = list.files(path)
+# print(all_files)
+count = numeric(length(all_files))
+i = 1
+for (file_dir in all_dirs[2:length(all_dirs)]){
+  count[i] = length(list.files(file_dir))
+  i = i + 1
+}
+names(count) <- all_files
+print(count)
+```
+
+# Preprocessing Process
+
+## Method to Preprocess the Audios
+
+The preprocessing contains two steps.
+
+##### 1\. FIR: Finite Impulse Response filter. 
+
+FIR can filter out a selected frequency section of a time wave. Since there are some backgroud noise besides birdsong in each birdsong audio, we use this method to filter out the noise. We manually set a frequency baseline 1500Hz by listening to different birdsongs of 13 bird species and remove the amplitudes whose frequency are smaller than 1500Hz. 
+
+Two plots below show the changes before and after the background noise is removed.
+
+```{r, warning=FALSE, echo = FALSE}
+setwd("~/stat605/group4/tmp/birdsongWav/Sample_wav")
+file_name = "1"
+all_files <- dir(paste0(file_name,"/"))
+wl <- 64
+
+sample_audio = readWave(paste0(file_name,'/',all_files[1]))
+spectro(sample_audio, main = "Frequency and Amplitudes Before FIR")
+sample_audio_fir = fir(sample_audio, from=1500, to = NULL, output = "Wave")
+spectro(sample_audio_fir, main = "Frequency and Amplitudes After FIR")
+```
+
+##### 2\. Mean Frequency Spectrum. 
+
+The plots below are the distribution of birdsong frequency of two different species. Obviously, their peak amplitudes are in different intervals. Inspired by this feature, we extracted the relative amplitude mean of the frequency distribution using STFT(Short-time Fourier Transformation). We divided the frequency distribution into 32 intervals, and calculated the relative amplitude mean. At the end, we got 32 features extracted from an audio. 
+
+```{r, warning=FALSE, echo=FALSE}
+setwd("~/stat605/group4/tmp/birdsongWav/Sample_wav")
+sample_audio = readWave(paste0(file_name,'/',all_files[10]))
+sample_audio_fir = fir(sample_audio, from=1500, to = NULL, output = "Wave")
+mspectra <- meanspec(sample_audio_fir, wl=wl, plot=TRUE, main = paste("Frequency Distribution of",all_files[10]))[,2]
+sample_audio = readWave(paste0(file_name,'/',all_files[20]))
+sample_audio_fir = fir(sample_audio, from=1500, to = NULL, output = "Wave")
+mspectra <- meanspec(sample_audio_fir, wl=wl, plot=TRUE, main = paste("Frequency Distribution of",all_files[20]))[,2]
+```
+
+
+## Deployment on CHTC
+
+The total number of birdsong audios used in our project is 6727. We used `sample()` function in `R` to obtain 30 groups of samples and deployed on **30 CHTC machines**.
+
+Each sample contains roughly 225 files and the size of each sample is about 350MB. Since FIR requires large amount of memories, in each procedure we requested **1CPU (Used 1), 2GB of Disk Space (Used roughly 1.3GB) and 8GB of memories (Used roughly 6GB)**. A single job can be completed in 14 minutes. The total 30 parallel jobs were completed in 1 hour, saving us a lot of time.
+
+# Model
+
+For the training part, we used Single Hidden-Layer Neural Network with skip layer connection for prediction. We tried several parameter options for the size of the hidden layer, and ended up choosing 8 knots in hidden layer as our final choice. Larger ones (16 and 12) showed worse results than the 8 because of overfitting. The total parameters (weights) we need to estimate are 797, which is calculated by $32\times 8 +8\times 13+32\times 13 + 13 + 8$. Below is the structure of neural network. 
+
+```{r, echo = FALSE, warning = FALSE, fig.width=8, fig.height=12}
+library(NeuralNetTools)
+setwd("~/stat605/group4/tmp/birdsongWav/results")
+load("model.RData")
+invisible(plotnet(fit_nnet2, alpha = 0.6))
+invisible(plotnet(fit_nnet2, alpha = 0.6, skip = TRUE))
+```
+
+The first figure is the basic layout for neural network. Points on the left are inputs. Points in the middle are knots in hidden layer. Points on the right are outputs. And two points on the top are bias terms we add for respective knots and outputs. The second figure is the skip layer connection, it directly connects the input and output(Similar to the ResNet). As a result, a neural network with skip layer connection performed better than a neural network without skip layer connection in our dataset.
+
+## Results
+
+The training data we used are group 4 to 30, total 6027 samples. The rest of datasets are test data with 700 samples. The training process took about 3 minutes for total 2235 iterations, reaching at 8487.7180 loss value. The **test accuracy is 49.14\%**, similar to the training accuracy (51.40\%). As for the multiple class prediction task, we often use Cohen's Kappa Coefficients to measure how effective a model is. 
+$$\kappa = \frac{p_0-p_e}{1-p_e} = 0.4225$$ 
+where $p_o$ is the relative observed agreement among raters, and $p_e$ is the hypothetical probability of chance agreement. In this case, 
+\[p_e = \sum_i(\text{Number of prediction on i}^{th} \text{ bird}\times \text{Number of }i^{th} \text{ bird})\big/\text{Sample_size}^2.\] 
+
+Thus, $\kappa = 0.4225$ represents a moderate agreement for categorical data.
+
+## Examples
+
+We randomly chose some examples here. Softmax has been applied on the outputs, which means the number in the first column can be represented as the probability of recognizing this audio as amerob.
+
+```{r, warning = FALSE, echo = FALSE}
+load("model.RData")
+setwd("~/stat605/group4/tmp/birdsongWav/results")
+test_mspectra = read.table("spec/mspectra1")
+test_label_name = read.table("label/label_file1")
+for (i in c(2:3)) {
+  file = paste0("spec/mspectra",i)
+  test_mspectra = rbind(test_mspectra, read.table(file))
+  test_label_name = rbind(test_label_name, read.table(paste0("label/label_file",i)))
+}
+
+(predict(fit_nnet2, newdata = test_mspectra[c(150,300,450),], type = "raw"))
+test_label_name[c(150,300,450),]
+
+```
+We successfully predicted the houspa, blujay. Although we got a 26.05\% probabiliry on thinking it's houwre, we failed to predict a right value.
+
+# Conclusion
+
+In summary, we find a model with an accuracy 49.14% on the test data sets to identify 13 bird specie in our dataset given its song.
+
+# Future Prospects and Drawbacks
+
+1.  Hard to distinguish the bird songs whose frequency is lower than 1500 Hz. Although we didn't have those birds after selections.
+
+2.  The accuracy of model can be improved by using Convolutional Neural Network and MFCC.
+
+3.  We didn't deal with the data imbalance issue. (The largest number of samples of certain bird species is 1206 and the smallest is 223.)
